@@ -11,7 +11,8 @@
   "main": "main.js",
   "author": {
     "name": "Hidayat Rahman",
-    "email": "hidaytrahman@gmail.com"},
+    "email": "hidaytrahman@gmail.com"
+  },
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder"
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "electron": "^29.0.0",
-    "electron-builder": "^26.0.12"
+    "electron-builder": "^26.0.12",
+    "electron-reloader": "^1.2.3"
   }
 }
