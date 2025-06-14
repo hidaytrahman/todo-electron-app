@@ -1,0 +1,33 @@
+{
+  "name": "todo-electron-app",
+  "description": "A simple Todo application built with Electron",
+  "license": "MIT",
+  "keywords": [
+    "electron",
+    "todo",
+    "application"
+  ],
+  "version": "1.0.0",
+  "main": "main.js",
+  "author": {
+    "name": "Hidayat Rahman",
+    "email": "hidaytrahman@gmail.com"},
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.hidaytrahman.todo",
+    "mac": {
+      "target": "dmg",
+      "icon": "icon.icns"
+    },
+    "files": [
+      "**/*"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^29.0.0",
+    "electron-builder": "^26.0.12"
+  }
+}
