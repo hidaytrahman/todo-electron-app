@@ -2,6 +2,10 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
+try {
+	require('electron-reloader')(module);
+} catch {}
+
 const todosPath = path.join(app.getPath('userData'), 'todos.json');
 
 function loadTodos() {
