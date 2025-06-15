@@ -15,7 +15,8 @@
   },
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "dev": "NODE_ENV=development concurrently 'yarn vite' 'wait-on http://localhost:5173 && electron .'"
   },
   "build": {
     "appId": "com.hidaytrahman.todo",
@@ -28,8 +29,16 @@
     ]
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.5.2",
+    "concurrently": "^9.1.2",
     "electron": "^29.0.0",
     "electron-builder": "^26.0.12",
-    "electron-reloader": "^1.2.3"
+    "electron-reloader": "^1.2.3",
+    "vite": "^6.3.5",
+    "wait-on": "^8.0.3"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   }
 }

@@ -21,15 +21,21 @@ function saveTodos(todos) {
 }
 
 function createWindow() {
+  const isDev = process.env.NODE_ENV === 'development';
   const win = new BrowserWindow({
     width: 400,
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      webSecurity: !isDev // Disable webSecurity in development only
     },
   });
 
-  win.loadFile('index.html');
+  if (isDev) {
+    win.loadURL('http://localhost:5173');
+  } else {
+    win.loadFile(path.join(__dirname, 'src/renderer/index.html'));
+  }
 }
 
 app.whenReady().then(() => {
