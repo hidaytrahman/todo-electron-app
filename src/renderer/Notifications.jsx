@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function Notifications() {
-  const [notifications, setNotifications] = useState([
-    { id: 1, message: 'Welcome to the app!', read: false },
-    { id: 2, message: 'Try the new Machine Info page!', read: false },
-  ]);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const markRead = (id) => {
-    setNotifications(notifications.map(n => n.id === id ? { ...n, read: true } : n));
+  useEffect(() => {
+    window.api.getNotifications().then(n => {
+      setNotifications(Array.isArray(n) ? n : []);
+      setLoading(false);
+    });
+  }, []);
+
+  const markRead = async (id) => {
+    const updated = notifications.map(n => n.id === id ? { ...n, read: true } : n);
+    setNotifications(updated);
+    await window.api.saveNotifications(updated);
   };
 
-  const clearAll = () => setNotifications([]);
+  const clearAll = async () => {
+    setNotifications([]);
+    await window.api.saveNotifications([]);
+  };
+
+  if (loading) return <div className="container"><h1>Notifications</h1><p>Loading...</p></div>;
 
   return (
     <div className="container">

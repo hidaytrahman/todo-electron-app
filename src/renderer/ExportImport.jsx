@@ -4,14 +4,13 @@ export default function ExportImport() {
   const fileInput = useRef();
   const [todos, setTodos] = useState([]);
 
-  // Listen for todos from TodoApp
   useEffect(() => {
+    window.api.getTodos().then(setTodos);
     const handler = (e) => setTodos(e.detail);
     window.addEventListener('import-todos', handler);
     return () => window.removeEventListener('import-todos', handler);
   }, []);
 
-  // Export todos as JSON file
   const handleExport = () => {
     const dataStr = JSON.stringify(todos, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
@@ -23,7 +22,6 @@ export default function ExportImport() {
     URL.revokeObjectURL(url);
   };
 
-  // Import todos from JSON file
   const handleImport = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -32,7 +30,9 @@ export default function ExportImport() {
       try {
         const imported = JSON.parse(event.target.result);
         if (Array.isArray(imported)) {
-          window.dispatchEvent(new CustomEvent('import-todos', { detail: imported }));
+          window.api.saveTodos(imported).then(() => {
+            window.dispatchEvent(new CustomEvent('import-todos', { detail: imported }));
+          });
         } else {
           alert('Invalid file format.');
         }
