@@ -7,6 +7,9 @@ try {
 } catch {}
 
 const todosPath = path.join(app.getPath('userData'), 'todos.json');
+const profilePath = path.join(app.getPath('userData'), 'profile.json');
+const settingsPath = path.join(app.getPath('userData'), 'settings.json');
+const notificationsPath = path.join(app.getPath('userData'), 'notifications.json');
 
 function loadTodos() {
   try {
@@ -18,6 +21,18 @@ function loadTodos() {
 
 function saveTodos(todos) {
   fs.writeFileSync(todosPath, JSON.stringify(todos, null, 2));
+}
+
+function loadJson(filePath, fallback) {
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch {
+    return fallback;
+  }
+}
+
+function saveJson(filePath, data) {
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 }
 
 function createWindow() {
@@ -41,6 +56,12 @@ function createWindow() {
 app.whenReady().then(() => {
   ipcMain.handle('get-todos', () => loadTodos());
   ipcMain.handle('save-todos', (_, todos) => saveTodos(todos));
+  ipcMain.handle('get-profile', () => loadJson(profilePath, { name: '', email: '' }));
+  ipcMain.handle('save-profile', (_, profile) => saveJson(profilePath, profile));
+  ipcMain.handle('get-settings', () => loadJson(settingsPath, { theme: 'light' }));
+  ipcMain.handle('save-settings', (_, settings) => saveJson(settingsPath, settings));
+  ipcMain.handle('get-notifications', () => loadJson(notificationsPath, []));
+  ipcMain.handle('save-notifications', (_, notifications) => saveJson(notificationsPath, notifications));
 
   createWindow();
 

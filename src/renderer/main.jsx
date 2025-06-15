@@ -51,9 +51,12 @@ function TodoApp() {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
 
-  // Listen for import event
   useEffect(() => {
-    const handler = (e) => setTodos(e.detail);
+    window.api.getTodos().then(setTodos);
+    const handler = (e) => {
+      setTodos(e.detail);
+      window.api.saveTodos(e.detail);
+    };
     window.addEventListener('import-todos', handler);
     return () => window.removeEventListener('import-todos', handler);
   }, []);
@@ -61,20 +64,24 @@ function TodoApp() {
   const addTodo = (e) => {
     e.preventDefault();
     if (!input.trim()) return;
-    setTodos([...todos, { id: Date.now(), text: input, done: false }]);
+    const newTodos = [...todos, { id: Date.now(), text: input, done: false }];
+    setTodos(newTodos);
+    window.api.saveTodos(newTodos);
     setInput("");
   };
 
   const toggleTodo = (id) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, done: !todo.done } : todo
-      )
+    const newTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, done: !todo.done } : todo
     );
+    setTodos(newTodos);
+    window.api.saveTodos(newTodos);
   };
 
   const removeTodo = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    const newTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(newTodos);
+    window.api.saveTodos(newTodos);
   };
 
   return (
